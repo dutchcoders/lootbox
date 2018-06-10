@@ -90,6 +90,14 @@ func run(c *cli.Context) error {
 		options = append(options, fn)
 	}
 
+	if d := c.String("url-contains-list"); d == "" {
+	} else if fn, err := app.WithUrlSubstrings(d); err != nil {
+		ec := cli.NewExitError(err.Error(), 1)
+		return ec
+	} else {
+		options = append(options, fn)
+	}
+
 	a, err := app.New(options...)
 	if err != nil {
 		ec := cli.NewExitError(err.Error(), 1)
@@ -119,6 +127,7 @@ Commit-ID: %s
 		cli.StringFlag{Name: "consumer-secret", EnvVar: "TWITTER_CONSUMER_SECRET", Value: "", Usage: "Twitter consumer secret"},
 		cli.StringFlag{Name: "token", EnvVar: "TWITTER_TOKEN", Value: "", Usage: "Twitter token"},
 		cli.StringFlag{Name: "token-secret", EnvVar: "TWITTER_TOKEN_SECRET", Value: "", Usage: "Twitter token secret"},
+		cli.StringFlag{Name: "url-contains-list", EnvVar: "URL_CONTAINS_LIST", Value: "", Usage: "List of url substrings to download - empty menas download all"},
 	}...)
 	app.Description = `lootbox: twitter loot downloader`
 	app.Commands = []cli.Command{}

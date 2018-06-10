@@ -29,6 +29,8 @@ type Config struct {
 	tokenSecret string
 
 	keywords []string
+
+	urlSubstrings []string
 }
 
 type App struct {
@@ -83,6 +85,14 @@ func WithDestinationDir(dir string) (OptionFn, error) {
 
 }
 
+func WithUrlSubstrings(val string) (OptionFn, error) {
+	return func(b *App) error {
+		b.urlSubstrings = strings.Split(val,"|")
+		return nil
+	}, nil
+
+}
+
 func New(options ...OptionFn) (*App, error) {
 	app := &App{
 		Config: Config{
@@ -101,7 +111,11 @@ func New(options ...OptionFn) (*App, error) {
 }
 
 func (a *App) Run() error {
-	d := Downloader(context.Background(), WithThreads(a.threadCount), WithFileStorage(a.destinationDir))
+	d := Downloader(
+		context.Background(), 
+		WithThreads(a.threadCount),
+		WithFileStorage(a.destinationDir), 
+		WithFilter(a.urlSubstrings))
 
 	re, err := xurls.StrictMatchingScheme("hxxps?")
 	if err != nil {

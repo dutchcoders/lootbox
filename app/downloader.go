@@ -5,6 +5,8 @@ import (
 	"context"
 	"io"
 	"time"
+	"fmt"
+	"strings"
 
 	"go.dutchsec.com/lootbox/app/queue"
 
@@ -24,6 +26,26 @@ func WithThreads(count int) func(*downloader) {
 	return func(d *downloader) {
 		d.numThreads = count
 	}
+}
+
+func WithFilter(arr []string) func(*downloader) {
+	return func(d *downloader) {
+		d.urlSubstrings = arr
+	}
+}
+
+func UrlContains(url *url.URL , needles []string) bool{
+	if len(needles) == 0 {
+		return true
+	}
+	var u = strings.ToLower(url.String())
+	for _, n := range needles {
+		if strings.Contains(u, n){
+			fmt.Println(color.BlueString("%s contains %s", u,n))
+			return true
+		}
+	}
+	return false
 }
 
 func Downloader(ctx context.Context, options ...func(*downloader)) *downloader {
@@ -64,6 +86,8 @@ type downloader struct {
 	s Storage
 
 	numThreads int
+
+	urlSubstrings []string
 }
 
 func (d *downloader) Download(u *url.URL) {
@@ -116,7 +140,9 @@ func (d *downloader) run() {
 		links := doc.ExtractLinks("a", "href")
 
 		for _, link := range links {
-			d.Download(link)
+			if UrlContains(link, d.urlSubstrings){
+				d.Download(link)
+			}
 		}
 	}
 }
