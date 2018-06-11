@@ -127,7 +127,7 @@ Commit-ID: %s
 		cli.StringFlag{Name: "consumer-secret", EnvVar: "TWITTER_CONSUMER_SECRET", Value: "", Usage: "Twitter consumer secret"},
 		cli.StringFlag{Name: "token", EnvVar: "TWITTER_TOKEN", Value: "", Usage: "Twitter token"},
 		cli.StringFlag{Name: "token-secret", EnvVar: "TWITTER_TOKEN_SECRET", Value: "", Usage: "Twitter token secret"},
-		cli.StringFlag{Name: "url-contains-list", EnvVar: "URL_CONTAINS_LIST", Value: "", Usage: "List of url substrings to download - empty menas download all"},
+		cli.StringFlag{Name: "url-contains-list", EnvVar: "URL_CONTAINS_LIST", Value: "", Usage: "List of url substrings to download - empty means download all"},
 	}...)
 	app.Description = `lootbox: twitter loot downloader`
 	app.Commands = []cli.Command{}
