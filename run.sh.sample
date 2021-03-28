@@ -3,6 +3,6 @@ docker run -t -e DESTINATION=/loot \
     -e TWITTER_CONSUMER_SECRET="CONSUMER_SECRET" \
     -e TWITTER_TOKEN="TOKEN" \
     -e TWITTER_TOKEN_SECRET="TOKEN_SECRET" \
-    -e URL_CONTAINS_LIST="fedex|dhl|exe|rar|ace|zip|bz2"
+    -e URL_CONTAINS_LIST="fedex|dhl|exe|rar|ace|zip|bz2" \
     -v /some/host/dir/loots:/loot \
     lootbox
